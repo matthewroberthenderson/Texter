@@ -1,8 +1,43 @@
 #include <iostream>
+#include <glew.h>
 #include <GLFW/glfw3.h>
+#include "Main.h"
 
-bool GL_LibCheck() {
+using namespace Texter;
 
+void Texter::DrawModernCanvasQuad() 
+{
+	unsigned int NewObjectVertexBufferID;
+	glGenBuffers(1, &NewObjectVertexBufferID);
+	glBindBuffer(GL_ARRAY_BUFFER, NewObjectVertexBufferID);
+	glBufferData
+	(
+		GL_ARRAY_BUFFER, 
+		8 * sizeof(float), 
+		VertexPositions, 
+		GL_DYNAMIC_DRAW
+	);
+}
+
+
+
+void Texter::DrawLegacyQuad(float size)
+{
+	//if no GLEW
+	glClear(GL_COLOR_BUFFER_BIT);
+	glBegin(GL_QUAD_STRIP);
+
+	
+	glVertex2f(-size,-size);
+	glVertex2f(-size, size);
+	glVertex2f(size, -size);
+	glVertex2f(size,  size);
+	glEnd();
+
+}
+
+
+bool Texter::GL_LibCheck() {
 	int a = glfwInit(); 
 	if (&a)
 	{
@@ -25,8 +60,51 @@ bool GL_LibCheck() {
 }
 
 
-int main() 
+
+int Texter::CreateWindow() {
+
+	if (&TestingContext) 
+	{
+
+		/* Create a windowed mode window and its OpenGL context */
+		TestingContext = glfwCreateWindow(1024, 512, "Hello World", NULL, NULL);
+		if (!TestingContext)
+		{
+			glfwTerminate();
+			return -1;
+		}
+
+		
+		/* Make the window's context current */
+		glfwMakeContextCurrent(TestingContext);
+
+		while (!glfwWindowShouldClose(TestingContext))
+		{
+			DrawLegacyQuad(.5);
+			glfwSwapBuffers(TestingContext);
+			glfwPollEvents();
+		}
+	}
+	else {
+		return 0;
+
+	}
+
+
+
+}
+
+
+int main(void)
 {
-	GL_LibCheck();
-	std::cin.get();
+
+	/* Initialize the library */
+	if (!glfwInit())
+		return -1;
+	
+	CreateWindow();
+	
+	glfwTerminate();
+	return 0;
+
 }
