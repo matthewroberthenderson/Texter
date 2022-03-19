@@ -1,2 +1,2 @@
 # Texter
-A simple application for creating textures from images using GLFW
+A simple application i'm working on for generating PBR textures with OpenGL. Uses GLFW amd GLEW libraries. 
