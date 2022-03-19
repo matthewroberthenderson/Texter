@@ -5,10 +5,23 @@
 
 using namespace Texter;
 
+
+struct MainStruct
+{
+	float A = 1.0;
+	int Main = 1;
+	bool b12 = false;
+
+};
+
+
+
+
 void Texter::DrawModernCanvasQuad() 
 {
 	unsigned int NewObjectVertexBufferID;
 	glGenBuffers(1, &NewObjectVertexBufferID);
+	
 	glBindBuffer(GL_ARRAY_BUFFER, NewObjectVertexBufferID);
 	glBufferData
 	(
@@ -18,6 +31,9 @@ void Texter::DrawModernCanvasQuad()
 		GL_DYNAMIC_DRAW
 	);
 }
+
+
+
 
 
 
@@ -101,9 +117,21 @@ int main(void)
 	/* Initialize the library */
 	if (!glfwInit())
 		return -1;
+
+
+	
+	
+
+	/*for (int i = 0; i < 4; i++) {
+		StructValues[i]->A = i;
+
+		StructValues[i]->b12 = false;
+		StructValues[i]->Main = 1.1;
+
+	}
+*/
 	
 	CreateWindow();
-	
 	glfwTerminate();
 	return 0;
 

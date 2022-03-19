@@ -10,7 +10,8 @@ namespace Texter {
 	void DrawLegacyQuad(float size);
 	void DrawModernCanvasQuad();
 	
-	float Size = .5;
+	
+	float size = .5;
 	//we would want to get this from the mesh read in data
 	//in future but it's a plane so whateva
 	int VertexCount = 8;
