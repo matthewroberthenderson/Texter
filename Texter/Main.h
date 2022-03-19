@@ -5,7 +5,9 @@ namespace Texter {
 
 	GLFWwindow* TestingContext;
 
-	int CreateWindow();
+	int CreateWindowLegacy();
+
+
 	bool GL_LibCheck();
 	void DrawLegacyQuad(float size);
 	void DrawModernCanvasQuad();
@@ -16,10 +18,12 @@ namespace Texter {
 	//in future but it's a plane so whateva
 	int VertexCount = 8;
 
+	
+
 	float VertexPositions[8] =
 	{
 		-size,-size,
-		- size, size,
+	   - size, size,
 		size, -size,
 		size,  size
 	};
