@@ -1,2 +1,2 @@
 # Texter
-A simple application i'm working on for generating PBR textures with OpenGL. Uses GLFW amd GLEW libraries. 
+A simple application i'm working on for generating procedural PBR textures with OpenGL. Uses GLFW amd GLEW libraries. 
