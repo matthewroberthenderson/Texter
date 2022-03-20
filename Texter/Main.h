@@ -8,13 +8,17 @@
 
 namespace Texter {
 
-	GLFWwindow* TestingContext;
 
+
+	int width = 640;
+	int height = 480;
+
+
+	GLFWwindow* TestingContext;
 	int CreateWindowLegacy();
 
 
 	float Time = 0;
-
 	bool GL_LibCheck();
 	void DrawLegacyQuad(float size);
 	
@@ -22,8 +26,9 @@ namespace Texter {
 	static void GLClearError() 
 	{
 		while (glGetError()!= GL_NO_ERROR);
-	
 	}
+
+
 
 	static bool GLLogCall(const char* function, const char* file, int line ) 
 	{
@@ -32,13 +37,14 @@ namespace Texter {
 			std::cout << "open gl error = " << error << function << "  " << file << " : "  <<line << std::endl;
 			return false;
 		}
-
 		return true;
-	
 	}
 
-	int CheckGlewInit() {
 
+
+
+	int CheckGlewInit() 
+	{
 		if (!glewInit()) {
 			std::cout << "error" << std::endl;
 		}
@@ -52,7 +58,6 @@ namespace Texter {
 
 
 	int(*CheckGLInits)() = &CheckGlewInit;
-
 	float size = .5;
 
 

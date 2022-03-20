@@ -7,7 +7,6 @@
 #include "Main.h"
 
 
-
 #define String std::string
 #define ASSERT(x) if(!(x)){__debugbreak();}
 #define GLCHECKERROR(x) GLClearError();\
@@ -201,18 +200,12 @@ void ThreadedTimeUpdate() {
 int main(void)
 {
 
-
-
-
-
-
-
-
-
-
+	//check everything for GL to present is ready
+	//exit if not
 	CheckGLInits();
 
-	GLFWwindow* window = glfwCreateWindow(640, 480, "TEXTER", NULL, NULL);
+	//open a new rendering context "window"
+	GLFWwindow* window = glfwCreateWindow(width, height, "TEXTER", NULL, NULL);
 
 	if (!window) {
 		glfwTerminate();
@@ -259,13 +252,14 @@ int main(void)
 	glBufferData
 	(
 		GL_ARRAY_BUFFER,
-		6 * 2 * sizeof(float),
+		4 * 2 * sizeof(float),
 		RectPos,
 		GL_STATIC_DRAW
 	);
 
 
 	glEnableVertexAttribArray(0);
+
 	//really bad but works for the plane
 	glVertexAttribPointer
 	(
@@ -279,7 +273,6 @@ int main(void)
 	);
 
 
-	
 	//buffer  --------
 	unsigned int IndexBufferObject;
 	glGenBuffers(1, &IndexBufferObject);
@@ -315,7 +308,7 @@ int main(void)
 		int location = glGetUniformLocation(shader, "u_Params");
 
 		//set the uniform
-		glUniform4f(location, Time, 0.0, 0.0, 1.0);
+		glUniform4f(location, Time, width, height, 1.0);
 
 
 		GLCHECKERROR(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr));
