@@ -187,7 +187,7 @@ void ThreadedTimeUpdate() {
 			(Time += 0.001f);
 
 			// Call our method
-			std::cout << Time << std::endl;
+			//std::cout << Time << std::endl;
 
 	
 		}
@@ -213,6 +213,7 @@ int main(void)
 	}
 
 	glfwMakeContextCurrent(window);
+	
 
 	//set fps to just the native screen refresh rate (think ming is just 60fps)
 	glfwSwapInterval(1);
@@ -310,9 +311,14 @@ int main(void)
 		//set the uniform
 		glUniform4f(location, Time, width, height, 1.0);
 
+		
+		
+
+
 
 		GLCHECKERROR(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr));
 		//ASSERT(GLLogCall());
+	
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();

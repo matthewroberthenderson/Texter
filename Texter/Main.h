@@ -13,6 +13,8 @@ namespace Texter {
 	int width = 640;
 	int height = 480;
 
+	
+	const char * FileName = "something";
 
 	GLFWwindow* TestingContext;
 	int CreateWindowLegacy();
@@ -58,7 +60,7 @@ namespace Texter {
 
 
 	int(*CheckGLInits)() = &CheckGlewInit;
-	float size = .5;
+	float size = .9;
 
 
 }
