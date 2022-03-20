@@ -13,6 +13,8 @@ namespace Texter {
 	int CreateWindowLegacy();
 
 
+	float Time = 0;
+
 	bool GL_LibCheck();
 	void DrawLegacyQuad(float size);
 	

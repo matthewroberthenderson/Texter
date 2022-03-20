@@ -1,9 +1,12 @@
 #include <iostream>
+#include <thread>
 #include <fstream>
 #include <string>
 #include <glew.h>
 #include <GLFW/glfw3.h>
 #include "Main.h"
+
+
 
 #define String std::string
 #define ASSERT(x) if(!(x)){__debugbreak();}
@@ -172,8 +175,40 @@ int Texter::CreateWindowLegacy() {
 }
 
 
+
+void ThreadedTimeUpdate() {
+
+	std::thread([&]
+	{
+		while (true)
+		{
+			// Wait 5 minutes
+			std::this_thread::sleep_for(std::chrono::milliseconds(10));
+
+			(Time += 0.001f);
+
+			// Call our method
+			std::cout << Time << std::endl;
+
+	
+		}
+	}).detach();
+
+
+}
+
+
 int main(void)
 {
+
+
+
+
+
+
+
+
+
 
 	CheckGLInits();
 
@@ -185,12 +220,19 @@ int main(void)
 	}
 
 	glfwMakeContextCurrent(window);
+
+	//set fps to just the native screen refresh rate (think ming is just 60fps)
+	glfwSwapInterval(1);
+
+
 	glewExperimental = GL_FALSE;
 
 
 	if (!glewInit() == GLEW_OK) {
 		exit(-1);
 	}
+
+
 
 
 	float RectPos[] = 
@@ -255,7 +297,11 @@ int main(void)
 	
 	std::cout << "Shader Link Test  " << parseShader("res/shaders/VertShader.shader") << std::endl;
 	unsigned int shader = CreateShader(parseShader("res/shaders/VertShader.shader"), parseShader("res/shaders/FragShader.shader"));
-	glUseProgram(shader);
+	GLCHECKERROR(glUseProgram(shader));
+
+
+	
+	ThreadedTimeUpdate();
 
 	while (!glfwWindowShouldClose(window))
 	{
@@ -263,6 +309,14 @@ int main(void)
 
 		GLClearError();
 		//GL_UNSIGNED_INT
+
+
+	    //get location of the uniform i put in the shader
+		int location = glGetUniformLocation(shader, "u_Params");
+
+		//set the uniform
+		glUniform4f(location, Time, 0.0, 0.0, 1.0);
+
 
 		GLCHECKERROR(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr));
 		//ASSERT(GLLogCall());
