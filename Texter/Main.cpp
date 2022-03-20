@@ -6,37 +6,10 @@
 #include "Main.h"
 
 #define String std::string
-
-
-void open(std::ifstream &fp, String a)
-{
-
-	//char * n = (char*)alloca(sizeof(char)*a.length());
-
-	//const char * b = (char*)alloca(sizeof(char)*a.length());
-	//strcpy(n, a.c_str());
-	//
-
-	//while (fp.getline(n, sizeof(n))) {
-	//	if (a.find("#shader") != std::string::npos) 
-	//	{
-
-	//		if (a.find("vertex") != std::string::npos) {
-	//			//set mode to vertex
-	//		}
-	//		else if (a.find("fragment") != std::string::npos)
-	//		{
-	//			//set mode to fragment
-
-	//		}
-	//		
-	//	
-	//	}
-	//}
-		
-}
-
-
+#define ASSERT(x) if(!(x)){__debugbreak();}
+#define GLCHECKERROR(x) GLClearError();\
+x;\
+ASSERT(GLLogCall( #x, __FILE__, __LINE__));
 
 static std::string parseShader(const std::string filePath) {
 std::string code;
@@ -51,12 +24,7 @@ file.close();
 return code;
 }
 
-
-
 using namespace Texter;
-
-
-
 
 static unsigned int CompileShader(const String &source, unsigned int type)
 {
@@ -90,8 +58,7 @@ static unsigned int CompileShader(const String &source, unsigned int type)
 
 			std::cout << Message << std::endl;
 
-			glDeleteShader(Ref);
-			
+			glDeleteProgram(Ref);
 
 		}
 		
@@ -129,39 +96,6 @@ static unsigned int CreateShader(const String &VertexShader, const String &Fragm
 	return FullShaderProg;
 
 }
-
-struct MainStruct
-{
-	float A = 1.0;
-	int Main = 1;
-	bool b12 = false;
-
-};
-
-
-
-
-void Texter::DrawModernCanvasQuad()
-{
-
-	unsigned int buff;
-
-	
-	//create 1 buffer for our data and assign it a pointer to our ID
-	glGenBuffers(1, &buff);
-	
-	glBindBuffer(GL_ARRAY_BUFFER, buff);
-	glBufferData
-	(
-		GL_ARRAY_BUFFER, 
-		8 * sizeof(float), 
-		VertexPositions, 
-		GL_STATIC_DRAW
-	);
-
-}
-
-
 
 
 void Texter::DrawLegacyQuad(float size)
@@ -204,10 +138,6 @@ bool Texter::GL_LibCheck() {
 
 
 
-
-
-
-
 int Texter::CreateWindowLegacy() {
 
 	if (&TestingContext) 
@@ -245,16 +175,9 @@ int Texter::CreateWindowLegacy() {
 int main(void)
 {
 
-	if (!glewInit()) {
-		std::cout << "error" << std::endl;
-	}
-	
-	if (!glfwInit()) {
-		printf("glfwInit() failed!");
-		return 0;
-	}
+	CheckGLInits();
 
-	GLFWwindow* window = glfwCreateWindow(640, 480, "My Title", NULL, NULL);
+	GLFWwindow* window = glfwCreateWindow(640, 480, "TEXTER", NULL, NULL);
 
 	if (!window) {
 		glfwTerminate();
@@ -262,17 +185,31 @@ int main(void)
 	}
 
 	glfwMakeContextCurrent(window);
-
 	glewExperimental = GL_FALSE;
+
 
 	if (!glewInit() == GLEW_OK) {
 		exit(-1);
 	}
 
 
-	unsigned int buff;
+	float RectPos[] = 
+	{
+		 -size,-size, //0
+		  size,-size, //1
+		  size, size, //2
+		 -size, size  //3
+	};
+
+	unsigned int indices[] =
+	{
+		0, 1, 2,
+		2, 3, 0
+	};
+
 
 	//create 1 buffer for our data and assign it a pointer to our ID
+	unsigned int buff;
 	glGenBuffers(1, &buff);
 
 	//select this buffer to be the one i'm using for the canvas
@@ -280,8 +217,8 @@ int main(void)
 	glBufferData
 	(
 		GL_ARRAY_BUFFER,
-		8 * sizeof(float),
-		VertexPositions,
+		6 * 2 * sizeof(float),
+		RectPos,
 		GL_STATIC_DRAW
 	);
 
@@ -291,41 +228,46 @@ int main(void)
 	glVertexAttribPointer
 	(
 		0, 
-		8, 
+		2, 
 		GL_FLOAT, 
 		GL_FALSE, 
 		//shift by float size and half our positions array (amount of verts)
-		sizeof(float) * 4, 
+		sizeof(float) * 2, 
 		0
 	);
 
 
 	
-	std::cout << "Shader Link Test  " << parseShader("res/shaders/VertShader.shader") << std::endl;
+	//buffer  --------
+	unsigned int IndexBufferObject;
+	glGenBuffers(1, &IndexBufferObject);
+
+	//select this buffer to be the one i'm using for the canvas
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IndexBufferObject);
+	glBufferData
+	(
+		GL_ELEMENT_ARRAY_BUFFER,
+		6 * sizeof(unsigned int),
+		indices,
+		GL_STATIC_DRAW
+	);
+
 	
+	std::cout << "Shader Link Test  " << parseShader("res/shaders/VertShader.shader") << std::endl;
 	unsigned int shader = CreateShader(parseShader("res/shaders/VertShader.shader"), parseShader("res/shaders/FragShader.shader"));
 	glUseProgram(shader);
-	//glDisableVertexAttribArray(0);
-	
 
 	while (!glfwWindowShouldClose(window))
 	{
-		//bit buggy right now
-		//glDrawArrays(GL_QUADS, 0, 4);
-
 		glClear(GL_COLOR_BUFFER_BIT);
-		glBegin(GL_QUAD_STRIP);
 
+		GLClearError();
+		//GL_UNSIGNED_INT
 
-		glVertex2f(-size, -size);
-		glVertex2f(-size, size);
-		glVertex2f(size, -size);
-		glVertex2f(size, size);
-		glEnd();
-
+		GLCHECKERROR(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr));
+		//ASSERT(GLLogCall());
 
 		glfwSwapBuffers(window);
-
 		glfwPollEvents();
 	}
 

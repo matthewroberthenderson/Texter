@@ -1,5 +1,10 @@
 #pragma once
 
+//intrinsics are specific to the compiler
+//we are using Microsoft Visual Studio so that is
+//__debugbreak()
+//if we were using clang or something we would need to use that
+
 
 namespace Texter {
 
@@ -10,21 +15,43 @@ namespace Texter {
 
 	bool GL_LibCheck();
 	void DrawLegacyQuad(float size);
-	void DrawModernCanvasQuad();
-	
-	
-	float size = .5;
-	//we would want to get this from the mesh read in data
-	//in future but it's a plane so whateva
-	int VertexCount = 8;
-
 	
 
-	float VertexPositions[8] =
+	static void GLClearError() 
 	{
-		-size,-size,
-	   - size, size,
-		size, -size,
-		size,  size
-	};
+		while (glGetError()!= GL_NO_ERROR);
+	
+	}
+
+	static bool GLLogCall(const char* function, const char* file, int line ) 
+	{
+		while (GLenum error = glGetError()) 
+		{
+			std::cout << "open gl error = " << error << function << "  " << file << " : "  <<line << std::endl;
+			return false;
+		}
+
+		return true;
+	
+	}
+
+	int CheckGlewInit() {
+
+		if (!glewInit()) {
+			std::cout << "error" << std::endl;
+		}
+
+		if (!glfwInit()) {
+			printf("glfwInit() failed!");
+			return 0;
+		}
+	
+	}
+
+
+	int(*CheckGLInits)() = &CheckGlewInit;
+
+	float size = .5;
+
+
 }
