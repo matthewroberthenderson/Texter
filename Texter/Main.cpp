@@ -139,7 +139,6 @@ bool Texter::GL_LibCheck() {
 }
 
 
-
 int Texter::CreateWindowLegacy() {
 
 	if (&TestingContext) 
@@ -173,8 +172,7 @@ int Texter::CreateWindowLegacy() {
 
 }
 
-
-
+ 
 void ThreadedTimeUpdate() {
 
 	std::thread([&]
@@ -200,16 +198,25 @@ void ThreadedTimeUpdate() {
 int main(void)
 {
 
+
 	//check everything for GL to present is ready
 	//exit if not
 	CheckGLInits();
 
+
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+
+
+
 	//open a new rendering context "window"
 	GLFWwindow* window = glfwCreateWindow(width, height, "TEXTER", NULL, NULL);
 
+
 	if (!window) {
 		glfwTerminate();
-		return 0;
+		return -1;
 	}
 
 	glfwMakeContextCurrent(window);
@@ -227,15 +234,15 @@ int main(void)
 	}
 
 
-
-
-	float RectPos[] = 
+	float VertexPositions[] = 
 	{
 		 -size,-size, //0
 		  size,-size, //1
 		  size, size, //2
 		 -size, size  //3
 	};
+
+	
 
 	unsigned int indices[] =
 	{
@@ -244,42 +251,59 @@ int main(void)
 	};
 
 
-	//create 1 buffer for our data and assign it a pointer to our ID
+	//important note
+	//vertex attribute pointer will bind a vertex buffer (something connected to the GL ARRAYBUFFER slot)
+	//with the actual layout or specification for the draw
+	//right now OpenGL is running in compat mode so it creates one for us ( index 0 above)
+	//need to do this manually when suing Core profile
+
+
+
+	
+	unsigned int VertexAttributeObject;
+
+	//we are just making one so put "1"
+	GLCHECKERROR(glGenVertexArrays(1,&VertexAttributeObject));
+
+	//when we bind this array
+	GLCHECKERROR(glBindVertexArray(VertexAttributeObject));
+
 	unsigned int buff;
 	glGenBuffers(1, &buff);
 
-	//select this buffer to be the one i'm using for the canvas
-	glBindBuffer(GL_ARRAY_BUFFER, buff);
-	glBufferData
-	(
-		GL_ARRAY_BUFFER,
-		4 * 2 * sizeof(float),
-		RectPos,
-		GL_STATIC_DRAW
-	);
+	//and we bind this buffer
+    glBindBuffer(GL_ARRAY_BUFFER, buff);
+
+	glBufferData(GL_ARRAY_BUFFER, 4 * 2 * sizeof(float), VertexPositions, GL_STATIC_DRAW);
+
+	//!!!! nothing actually links the two..
 
 
+	//but when we enable
 	glEnableVertexAttribArray(0);
+	//and specify a vertex attribute pointer, index 0 of this vertex array is bound to the currently bound buffer
+	//this is what links our Vertex Attribute Object above, to our current buffer.
+     glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, 0);
 
-	//really bad but works for the plane
-	glVertexAttribPointer
-	(
-		0, 
-		2, 
-		GL_FLOAT, 
-		GL_FALSE, 
-		//shift by float size and half our positions array (amount of verts)
-		sizeof(float) * 2, 
-		0
-	);
+	 //if we then bound a different buffer, enabled it and then called glVertexAttribPointer with the param "1"
+	 //as the index
+	 //then glGenVertexArrays( -->1 <---- would point to a different buffer. Then new one. 
 
 
+
+
+
+	//create index buffer for indicies
 	//buffer  --------
 	unsigned int IndexBufferObject;
 	glGenBuffers(1, &IndexBufferObject);
 
 	//select this buffer to be the one i'm using for the canvas
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IndexBufferObject);
+
+	glBindVertexArray(VertexAttributeObject);
+	  
+
 	glBufferData
 	(
 		GL_ELEMENT_ARRAY_BUFFER,
@@ -291,43 +315,59 @@ int main(void)
 	
 	std::cout << "Shader Link Test  " << parseShader("res/shaders/VertShader.shader") << std::endl;
 	unsigned int shader = CreateShader(parseShader("res/shaders/VertShader.shader"), parseShader("res/shaders/FragShader.shader"));
-	GLCHECKERROR(glUseProgram(shader));
+
+	
+
+
+	glBindVertexArray(0);
+	glUseProgram(0);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
 
 	
-	ThreadedTimeUpdate();
+
+
+	ThreadedTimeUpdate(); 
 
 	while (!glfwWindowShouldClose(window))
 	{
 		glClear(GL_COLOR_BUFFER_BIT);
 
+		GLCHECKERROR(glUseProgram(shader));
 		GLClearError();
 		//GL_UNSIGNED_INT
+
+		//when we bind a vertex array
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IndexBufferObject);
+		//and we bind a buffer
+		glBindVertexArray(VertexAttributeObject);
+		
 
 
 	    //get location of the uniform i put in the shader
 		int location = glGetUniformLocation(shader, "u_Params");
 
-		//set the uniform
-		glUniform4f(location, Time, width, height, 1.0);
+		//Uniform might have been removed from the shader or whatever so just assert. 
+		ASSERT(location != -1);
 
+		//set the uniforms with some data i can use
+		GLCHECKERROR(glUniform4f(location, Time, width, height, 1.0));
 		
-		
-
-
 
 		GLCHECKERROR(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr));
-		//ASSERT(GLLogCall());
-	
+		
+
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();
 	}
 
+	
+
 	glfwTerminate();
 	return 0;
 	
-
 }
 
 
