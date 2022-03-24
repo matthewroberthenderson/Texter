@@ -25,23 +25,6 @@ namespace Texter {
 	void DrawLegacyQuad(float size);
 	
 
-	static void GLClearError() 
-	{
-		while (glGetError()!= GL_NO_ERROR);
-	}
-
-
-
-	static bool GLLogCall(const char* function, const char* file, int line ) 
-	{
-		while (GLenum error = glGetError()) 
-		{
-			std::cout << "open gl error = " << error << function << "  " << file << " : "  <<line << std::endl;
-			return false;
-		}
-		return true;
-	}
-
 
 
 

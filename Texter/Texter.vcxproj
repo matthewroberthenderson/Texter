@@ -129,9 +129,20 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="TexterRenderer\indicesHelpers.cpp" />
+    <ClCompile Include="TexterRenderer\Renderer.cpp" />
+    <ClCompile Include="TexterRenderer\VertexHelpers.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Main.h" />
+    <ClInclude Include="TexterRenderer\indicesHelpers.h" />
+    <ClInclude Include="TexterRenderer\Renderer.h" />
+    <ClInclude Include="TexterRenderer\VertexHelpers.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\shaders\FragShader.shader" />
+    <None Include="res\shaders\FragShaderUniform.shader" />
+    <None Include="res\shaders\VertShader.shader" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

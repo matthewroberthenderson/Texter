@@ -2,16 +2,14 @@
 #include <thread>
 #include <fstream>
 #include <string>
+#include "TexterRenderer/indicesHelpers.h"
+#include "TexterRenderer/VertexHelpers.h"
 #include <glew.h>
 #include <GLFW/glfw3.h>
 #include "Main.h"
 
+#include "TexterRenderer/Renderer.h"
 
-#define String std::string
-#define ASSERT(x) if(!(x)){__debugbreak();}
-#define GLCHECKERROR(x) GLClearError();\
-x;\
-ASSERT(GLLogCall( #x, __FILE__, __LINE__));
 
 static std::string parseShader(const std::string filePath) {
 std::string code;
@@ -268,41 +266,22 @@ int main(void)
 	//when we bind this array
 	GLCHECKERROR(glBindVertexArray(VertexAttributeObject));
 
-	unsigned int buff;
-	glGenBuffers(1, &buff);
 
-	//and we bind this buffer
-    glBindBuffer(GL_ARRAY_BUFFER, buff);
-
-	glBufferData(GL_ARRAY_BUFFER, 4 * 2 * sizeof(float), VertexPositions, GL_STATIC_DRAW);
-
-	//!!!! nothing actually links the two..
-
-
-	//but when we enable
-	glEnableVertexAttribArray(0);
-	//and specify a vertex attribute pointer, index 0 of this vertex array is bound to the currently bound buffer
-	//this is what links our Vertex Attribute Object above, to our current buffer.
-     glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, 0);
-
-	 //if we then bound a different buffer, enabled it and then called glVertexAttribPointer with the param "1"
-	 //as the index
-	 //then glGenVertexArrays( -->1 <---- would point to a different buffer. Then new one. 
-
-
-
+	//REFACTOR ABSTRACTION
+	VertexBuffer VertexBufferInstance(VertexPositions, 4 * 2 * sizeof(float));
+    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, 0);
 
 
 	//create index buffer for indicies
 	//buffer  --------
-	unsigned int IndexBufferObject;
-	glGenBuffers(1, &IndexBufferObject);
 
-	//select this buffer to be the one i'm using for the canvas
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IndexBufferObject);
+	 IndicesBuffer IndicesBufferInstance(indices, 6);
 
 	glBindVertexArray(VertexAttributeObject);
-	  
+	//but when we enable
+
+
+	glEnableVertexAttribArray(0);
 
 	glBufferData
 	(
@@ -339,11 +318,11 @@ int main(void)
 		//GL_UNSIGNED_INT
 
 		//when we bind a vertex array
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IndexBufferObject);
+		IndicesBufferInstance.SelectForRendering();
+
 		//and we bind a buffer
 		glBindVertexArray(VertexAttributeObject);
 		
-
 
 	    //get location of the uniform i put in the shader
 		int location = glGetUniformLocation(shader, "u_Params");
