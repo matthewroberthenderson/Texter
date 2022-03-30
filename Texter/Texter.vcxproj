@@ -131,12 +131,16 @@
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="TexterRenderer\indicesHelpers.cpp" />
     <ClCompile Include="TexterRenderer\Renderer.cpp" />
+    <ClCompile Include="TexterRenderer\VertexArrayObject.cpp" />
+    <ClCompile Include="TexterRenderer\VertexBufferDescription.cpp" />
     <ClCompile Include="TexterRenderer\VertexHelpers.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Main.h" />
     <ClInclude Include="TexterRenderer\indicesHelpers.h" />
     <ClInclude Include="TexterRenderer\Renderer.h" />
+    <ClInclude Include="TexterRenderer\VertexArrayObject.h" />
+    <ClInclude Include="TexterRenderer\VertexBufferDescription.h" />
     <ClInclude Include="TexterRenderer\VertexHelpers.h" />
   </ItemGroup>
   <ItemGroup>

@@ -5,6 +5,7 @@
 #include "TexterRenderer/indicesHelpers.h"
 #include "TexterRenderer/VertexHelpers.h"
 #include <glew.h>
+#include "TexterRenderer/VertexArrayObject.h"
 #include <GLFW/glfw3.h>
 #include "Main.h"
 
@@ -255,21 +256,29 @@ int main(void)
 	//right now OpenGL is running in compat mode so it creates one for us ( index 0 above)
 	//need to do this manually when suing Core profile
 
-
+	//------------------------------------------------------------------------------------------------------------
 
 	
 	unsigned int VertexAttributeObject;
 
-	//we are just making one so put "1"
-	GLCHECKERROR(glGenVertexArrays(1,&VertexAttributeObject));
+	VertexArrayObject VertexArray;
+	VertexBuffer VertexBufferInstance(VertexPositions, 4 * 2 * sizeof(float));
+	VertexBufferDescription VertexBufferDescription;
+	VertexBufferDescription.AddToDataDescription<float>(2);
+	VertexArray.AddBuffer(VertexBufferInstance, VertexBufferDescription);
 
+	//we are just making one so put "1"
+	//GLCHECKERROR(glGenVertexArrays(1,&VertexAttributeObject));
+	
+	//VertexArray.SelectForRendering();
+	
 	//when we bind this array
-	GLCHECKERROR(glBindVertexArray(VertexAttributeObject));
+	//GLCHECKERROR(glBindVertexArray(VertexAttributeObject));
 
 
 	//REFACTOR ABSTRACTION
-	VertexBuffer VertexBufferInstance(VertexPositions, 4 * 2 * sizeof(float));
-    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, 0);
+//	VertexBuffer VertexBufferInstance(VertexPositions, 4 * 2 * sizeof(float));
+   // glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, 0);
 
 
 	//create index buffer for indicies
@@ -277,7 +286,7 @@ int main(void)
 
 	 IndicesBuffer IndicesBufferInstance(indices, 6);
 
-	glBindVertexArray(VertexAttributeObject);
+	//glBindVertexArray(VertexAttributeObject);
 	//but when we enable
 
 
@@ -321,8 +330,8 @@ int main(void)
 		IndicesBufferInstance.SelectForRendering();
 
 		//and we bind a buffer
-		glBindVertexArray(VertexAttributeObject);
-		
+		//glBindVertexArray(VertexAttributeObject);
+		VertexArray.SelectForRendering();
 
 	    //get location of the uniform i put in the shader
 		int location = glGetUniformLocation(shader, "u_Params");
