@@ -8,24 +8,16 @@
 VertexArrayObject::VertexArrayObject()
 {
 
-
 	//on construction, create array
 	GLCHECKERROR(glGenVertexArrays(1, &GL_Object_RenderID));
-
-	
-
 }
-
-
 
 
 VertexArrayObject::~VertexArrayObject()
 {
-
 	//on destroy, delete the array
 	glDeleteVertexArrays(1, &GL_Object_RenderID);
 }
-
 
 
 void VertexArrayObject::AddBuffer(const VertexBuffer & VertexBufferRef, const VertexBufferDescription& VertexBufferDescriptionRef)
@@ -37,11 +29,9 @@ void VertexArrayObject::AddBuffer(const VertexBuffer & VertexBufferRef, const Ve
 	VertexBufferRef.SelectForRendering();
 	
 	//const auto &VertexBufferDescriptions = VertexBufferDescriptionRef.GetElementDescriptions();
-
 	const auto& VertexBufferDescriptions = VertexBufferDescriptionRef.GetElementDescriptions();
 
 	//std::vector<VertexBuffer_DescribeElement>
-
 	//array offset in bytes
 	unsigned int Offset = 0;
 	//unsigned int i = 0; i < VertexBufferDescriptions.size; i++

@@ -7,6 +7,7 @@
 #include <glew.h>
 #include "TexterRenderer/VertexArrayObject.h"
 #include <GLFW/glfw3.h>
+#include "./TexterRenderer/TextureClass/TextureBase.h"
 #include "Main.h"
 
 #include "TexterRenderer/Renderer.h"
@@ -329,8 +330,6 @@ int main(void)
 		//when we bind a vertex array
 		IndicesBufferInstance.SelectForRendering();
 
-		//and we bind a buffer
-		//glBindVertexArray(VertexAttributeObject);
 		VertexArray.SelectForRendering();
 
 	    //get location of the uniform i put in the shader
@@ -345,7 +344,9 @@ int main(void)
 
 		GLCHECKERROR(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr));
 		
-
+		//TextureBase Texture("res/textures/IconMain.png");
+		//no slot ref, just doing 0
+		//Texture.Bind();
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();
