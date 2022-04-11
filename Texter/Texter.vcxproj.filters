@@ -33,6 +33,12 @@
     <ClCompile Include="TexterRenderer\VertexBufferDescription.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="TexterRenderer\Texture\stb_image\stb_image.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TexterRenderer\ShaderCore\ShaderCore.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Main.h">
@@ -51,6 +57,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="TexterRenderer\VertexBufferDescription.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TexterRenderer\Texture\stb_image\stb_image.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TexterRenderer\TextureClass\TextureBase.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TexterRenderer\ShaderCore\ShaderCore.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

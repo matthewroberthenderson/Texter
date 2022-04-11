@@ -77,7 +77,7 @@ public:
 	}
 
 
-	void Bind( unsigned int Slot = 0) const 
+	void SelectForRendering( unsigned int Slot = 0) const 
 	{
 		//pick a slot
 		GLCHECKERROR(glActiveTexture(GL_TEXTURE0 + Slot);)
@@ -86,7 +86,7 @@ public:
 		GLCHECKERROR(glBindTexture(GL_TEXTURE_2D, TextureRenderID);)
 	}
 
-	void unBind() 
+	void UnSelectForRendering()
 	{
 		GLCHECKERROR(glBindTexture(GL_TEXTURE_2D, 0);)
 	}

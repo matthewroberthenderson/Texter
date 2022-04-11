@@ -8,6 +8,7 @@
 #include "TexterRenderer/VertexArrayObject.h"
 #include <GLFW/glfw3.h>
 #include "./TexterRenderer/TextureClass/TextureBase.h"
+#include "./TexterRenderer/ShaderCore/ShaderCore.h"
 #include "Main.h"
 
 #include "TexterRenderer/Renderer.h"
@@ -303,13 +304,21 @@ int main(void)
 
 	
 	std::cout << "Shader Link Test  " << parseShader("res/shaders/VertShader.shader") << std::endl;
-	unsigned int shader = CreateShader(parseShader("res/shaders/VertShader.shader"), parseShader("res/shaders/FragShader.shader"));
+	//unsigned int shader = CreateShader(parseShader("res/shaders/VertShader.shader"), parseShader("res/shaders/FragShader.shader"));
+	std::string V = "res/shaders/VertShader.shader";
+	std::string F = "res/shaders/FragShader.shader";
 
-	
+
+	ShaderBase Shader(V, F);
+	Shader.SelectForRendering();
+
+	//Shader.SetParameter4("u_Params", Time, width, height, 1.0);
+
+	//glUseProgram(0);
+
 
 
 	glBindVertexArray(0);
-	glUseProgram(0);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
@@ -323,7 +332,9 @@ int main(void)
 	{
 		glClear(GL_COLOR_BUFFER_BIT);
 
-		GLCHECKERROR(glUseProgram(shader));
+		//GLCHECKERROR(glUseProgram(shader));
+		Shader.SelectForRendering();
+
 		GLClearError();
 		//GL_UNSIGNED_INT
 
@@ -333,14 +344,16 @@ int main(void)
 		VertexArray.SelectForRendering();
 
 	    //get location of the uniform i put in the shader
-		int location = glGetUniformLocation(shader, "u_Params");
+		//int location = glGetUniformLocation(shader, "u_Params");
 
 		//Uniform might have been removed from the shader or whatever so just assert. 
-		ASSERT(location != -1);
+		//ASSERT(location != -1);
 
 		//set the uniforms with some data i can use
-		GLCHECKERROR(glUniform4f(location, Time, width, height, 1.0));
-		
+		//GLCHECKERROR(glUniform4f(location, Time, width, height, 1.0));
+
+		std::string n = "u_Params";
+		Shader.SetParameter4(n, Time, width, height, 1.0);
 
 		GLCHECKERROR(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr));
 		
