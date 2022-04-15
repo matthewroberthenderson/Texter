@@ -1,49 +1,36 @@
 #pragma once
+// Include GLEW
+#include <glew.h>
 
-//intrinsics are specific to the compiler
-//we are using Microsoft Visual Studio so that is
-//__debugbreak()
-//if we were using clang or something we would need to use that
+// Include GLFW
+#include <GLFW/glfw3.h>
+#include <iostream>
+#include "TexterRenderer/VertexHelpers/VertexBuffer.h"
+#include "TexterRenderer/VertexHelpers/VertexArray.h"
+#include "TexterRenderer/VertexHelpers/IndexBufferHelpers.h"
+#include "TexterRenderer/ShaderCore/ShaderBase.h"
+#include "Renderer.h"
+#include "TexterRenderer/TextureClass/TextureHelpers.h"
 
+float Time;
+int width = 1024, height = 768;
 
-namespace Texter {
+float QuadStripSize = 0.5;
 
+void ThreadedTimeUpdate() {
 
-
-	int width = 640;
-	int height = 480;
-
-	
-	const char * FileName = "something";
-
-	GLFWwindow* TestingContext;
-	int CreateWindowLegacy();
-
-
-	float Time = 0;
-	bool GL_LibCheck();
-	void DrawLegacyQuad(float size);
-	
-
-
-
-
-	int CheckGlewInit() 
+	std::thread([&]
 	{
-		if (!glewInit()) {
-			std::cout << "error" << std::endl;
+		while (true)
+		{
+
+			std::this_thread::sleep_for(std::chrono::milliseconds(10));
+
+			(Time += 0.001f);
+
+
 		}
-
-		if (!glfwInit()) {
-			printf("glfwInit() failed!");
-			return 0;
-		}
-	
-	}
-
-
-	int(*CheckGLInits)() = &CheckGlewInit;
-	float size = .9;
+	}).detach();
 
 
 }
