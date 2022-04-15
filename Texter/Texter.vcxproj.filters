@@ -73,5 +73,7 @@
     <None Include="res\shaders\FragShader.shader" />
     <None Include="res\shaders\FragShaderUniform.shader" />
     <None Include="res\shaders\VertShader.shader" />
+    <None Include="res\shaders\TextureUniformFragShader.shader" />
+    <None Include="res\shaders\TextureUniformVertShader.shader" />
   </ItemGroup>
 </Project>

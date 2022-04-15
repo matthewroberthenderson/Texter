@@ -46,6 +46,7 @@ public:
 
 	unsigned int GetParameterLocation(std::string &Location)
 	{
+
 		GLCHECKERROR(int CurrentProgramLocation = glGetUniformLocation(RenderID, Location.c_str()));
 		if (CurrentProgramLocation == -1)
 		{
@@ -55,10 +56,25 @@ public:
 		return CurrentProgramLocation;
 	}
 
+
+	void SetUniform1i( std::string& name, int value)
+	{
+		GLCHECKERROR(glUniform1i(GetParameterLocation(name), value);)
+	}
+
+	//this i want to template
 	void SetParameter4(std::string &name, float Param_01, float Param_02, float Param_03, float Param_04)
 	{
 		
 		GLCHECKERROR(glUniform4f(GetParameterLocation(name), Param_01, Param_02, Param_03, Param_04);)
+	}
+
+	
+
+	void SetParameterTexture(std::string &name, int value)
+	{
+		GLCHECKERROR(int d = glGetUniformLocation(1,name.c_str());)
+		GLCHECKERROR(glUniform1i(d, value);)
 	}
 
 
@@ -160,7 +176,6 @@ private:
 	std::string CurrentSetVertexShaderPath;
 	std::string CurrentSetFragmentShaderPath;
 
-	
-	//""u_Params"
+
 
 };

@@ -1,11 +1,9 @@
 ﻿C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\IDE\VC\VCTargets\Microsoft.CppBuild.targets(376,5): warning MSB8004: Intermediate Directory does not end with a trailing slash.  This build instance will add the slash as it is required to allow proper evaluation of the Intermediate Directory.
   Main.cpp
 c:\dev\texter\texter\main.h(46): warning C4305: 'initializing': truncation from 'double' to 'float'
-c:\dev\texter\texter\main.cpp(343): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
-c:\dev\texter\texter\main.cpp(262): warning C4101: 'VertexAttributeObject': unreferenced local variable
-  VertexArrayObject.cpp
-  VertexBufferDescription.cpp
-  Generating Code...
+c:\dev\texter\texter\main.cpp(293): warning C4129: 'I': unrecognized character escape sequence
+c:\dev\texter\texter\main.cpp(330): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+c:\dev\texter\texter\main.cpp(257): warning C4101: 'VertexAttributeObject': unreferenced local variable
 c:\dev\texter\texter\main.h(42): warning C4715: 'Texter::CheckGlewInit': not all control paths return a value
-c:\dev\texter\texter\main.cpp(172): warning C4715: 'Texter::CreateWindowLegacy': not all control paths return a value
+c:\dev\texter\texter\main.cpp(174): warning C4715: 'Texter::CreateWindowLegacy': not all control paths return a value
   Texter.vcxproj -> C:\dev\Texter\Debug\Texter.exe

@@ -3,6 +3,7 @@
 layout(location = 0) out vec4 color;
 uniform vec4 u_Params;
 
+uniform sampler2D u_Texture;
 
 const float hardness = 0.1;
 const int iterations = 1;

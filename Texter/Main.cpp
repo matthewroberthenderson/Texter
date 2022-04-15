@@ -237,10 +237,10 @@ int main(void)
 
 	float VertexPositions[] = 
 	{
-		 -size,-size, //0
-		  size,-size, //1
-		  size, size, //2
-		 -size, size  //3
+		 -size,-size, 0,0, //0
+		  size,-size, 0,1, //1
+		  size, size, 1,0,//2
+		 -size, size ,1,1//3
 	};
 
 	
@@ -252,45 +252,23 @@ int main(void)
 	};
 
 
-	//important note
-	//vertex attribute pointer will bind a vertex buffer (something connected to the GL ARRAYBUFFER slot)
-	//with the actual layout or specification for the draw
-	//right now OpenGL is running in compat mode so it creates one for us ( index 0 above)
-	//need to do this manually when suing Core profile
-
-	//------------------------------------------------------------------------------------------------------------
 
 	
 	unsigned int VertexAttributeObject;
 
 	VertexArrayObject VertexArray;
-	VertexBuffer VertexBufferInstance(VertexPositions, 4 * 2 * sizeof(float));
+	VertexBuffer VertexBufferInstance(VertexPositions, 4 * 4 * sizeof(float));
 	VertexBufferDescription VertexBufferDescription;
+	VertexBufferDescription.AddToDataDescription<float>(2);
 	VertexBufferDescription.AddToDataDescription<float>(2);
 	VertexArray.AddBuffer(VertexBufferInstance, VertexBufferDescription);
 
-	//we are just making one so put "1"
-	//GLCHECKERROR(glGenVertexArrays(1,&VertexAttributeObject));
-	
-	//VertexArray.SelectForRendering();
-	
-	//when we bind this array
-	//GLCHECKERROR(glBindVertexArray(VertexAttributeObject));
 
-
-	//REFACTOR ABSTRACTION
-//	VertexBuffer VertexBufferInstance(VertexPositions, 4 * 2 * sizeof(float));
-   // glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, 0);
-
-
-	//create index buffer for indicies
-	//buffer  --------
 
 	 IndicesBuffer IndicesBufferInstance(indices, 6);
 
 	//glBindVertexArray(VertexAttributeObject);
 	//but when we enable
-
 
 	glEnableVertexAttribArray(0);
 
@@ -311,6 +289,9 @@ int main(void)
 
 	ShaderBase Shader(V, F);
 	Shader.SelectForRendering();
+
+	TextureBase Tex("\res\textures\IconMain.png");
+	
 
 	//Shader.SetParameter4("u_Params", Time, width, height, 1.0);
 
@@ -343,23 +324,20 @@ int main(void)
 
 		VertexArray.SelectForRendering();
 
-	    //get location of the uniform i put in the shader
-		//int location = glGetUniformLocation(shader, "u_Params");
 
-		//Uniform might have been removed from the shader or whatever so just assert. 
-		//ASSERT(location != -1);
-
-		//set the uniforms with some data i can use
-		//GLCHECKERROR(glUniform4f(location, Time, width, height, 1.0));
 
 		std::string n = "u_Params";
 		Shader.SetParameter4(n, Time, width, height, 1.0);
 
+		Tex.SelectForRendering();
+		std::string b = "u_Texture";
+		Shader.SetParameterTexture(b,1);
+
+
+
 		GLCHECKERROR(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr));
 		
-		//TextureBase Texture("res/textures/IconMain.png");
-		//no slot ref, just doing 0
-		//Texture.Bind();
+	
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();
