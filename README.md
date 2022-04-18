@@ -1,5 +1,5 @@
 # Texter
-A simple application i'm working on for generating procedural PBR textures with OpenGL. Uses GLFW amd GLEW libraries. 
+Texter is an application i'm working on using OpenGl for generating PBR textures from procedural data or images. Uses GLFW amd GLEW libraries. 
 
 
 
