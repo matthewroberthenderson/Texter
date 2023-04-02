@@ -1,0 +1,6 @@
+[submodule "Dependencies/glew"]
+	path = Dependencies/glew
+	url = https://github.com/nigels-com/glew.git
+[submodule "Texter/external/stb"]
+	path = Texter/external/stb
+	url = https://github.com/nothings/stb.git

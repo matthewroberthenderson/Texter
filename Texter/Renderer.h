@@ -1,10 +1,10 @@
 #pragma once
-#include <glew.h>
-#include "TexterRenderer/VertexHelpers/Debug.h"
+#include <GL/glew.h>
+#include "Debug.h"
 #include <thread>
-#include "TexterRenderer/VertexHelpers/VertexArray.h"
-#include "TexterRenderer/VertexHelpers/IndexBufferHelpers.h"
-#include "TexterRenderer/ShaderCore/ShaderBase.h"
+#include "VertexArray.h"
+#include "IndexBufferHelpers.h"
+#include "ShaderBase.h"
 
 
 class Renderer
