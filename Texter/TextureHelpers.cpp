@@ -1,5 +1,5 @@
-//#include "/dev/Texter/Texter/Libraries/stb_image/stb_image.h"
-#include "external/stb/stb_image.h"
+#define STB_IMAGE_IMPLEMENTATION
+#include "stb_image.h"
 #include "TextureHelpers.h"
 
 TextureHelpers::TextureHelpers(const std::string& path)

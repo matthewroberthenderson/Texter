@@ -1,22 +1,16 @@
 
-
 cmake_minimum_required(VERSION 3.0)
 
 set(PROJECTNAME Texter)
 
-set(CMAKE_GENERATOR_PLATFORM Win32)
+# set(CMAKE_GENERATOR_PLATFORM Win32)
 
 project(${PROJECTNAME})
 
 
-# Set the build directory
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
-
-
-
 
 set(SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/Texter)
-#set(INCLUDES_DIR ${CMAKE_CURRENT_SOURCE_DIR}/include)
+
 
 
 # Set up the main source files
@@ -54,114 +48,63 @@ source_group("headers" FILES ${HEADER_FILES})
 # source_group("headers/otherfolder" FILES ${HEADER_FILES})
 
 
-#external items
 
 
-#-----------------------------------------
+# Set the directory where the build files should be placed
+set(CMAKE_CURRENT_BINARY_DIR ${CMAKE_SOURCE_DIR}/build)
+
+# Create the build directory if it does not exist
+file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
+
+#required to link with glew static library
+add_definitions(-DGLEW_STATIC)
+
+set(GLEW_LIBRARIES "${CMAKE_SOURCE_DIR}/Texter/external/glew-2.1.0/lib/Release/x64/glew32s.lib")
+
+set(CMAKE_PREFIX_PATH "${CMAKE_SOURCE_DIR}/Texter/external/glew-2.1.0" )
+
+
+find_package(GLEW REQUIRED)
+
+# Set the path to the GLFW library
+set(GLFW_DIR "${CMAKE_SOURCE_DIR}/Texter/external/glfw-3.3.8.bin.WIN64")
+
+# Include directories for GLFW
+include_directories("${GLFW_DIR}/include")
+
 #stb image
-include_directories(${CMAKE_SOURCE_DIR}Texter/external/stb)
+include_directories(${CMAKE_SOURCE_DIR}/Texter/external/stb/)
+
+
+
+# Link directories for GLFW
+link_directories("${GLFW_DIR}/lib-vc2022")
+
+link_directories("${CMAKE_SOURCE_DIR}/Texter/external/glew-2.1.0/lib/Release/x64/")
+
+
+
+# Add the Mello executable
+add_executable(${PROJECTNAME} ${SRC_FILES})
+
+
+target_link_libraries(${PROJECTNAME} PRIVATE "${GLFW_DIR}/lib-vc2022/glfw3.lib")
+
+
+# Set the include directories for your project
+target_include_directories(${PROJECTNAME} PRIVATE ${GLEW_INCLUDE_DIRS})
+
+
+#add OpenGL32.lib to included libs
+target_link_libraries(${PROJECTNAME} PRIVATE OpenGL32.lib)
+
+# Add the Jup header directory to the include directories for Mello
+target_include_directories(${PROJECTNAME} PRIVATE Jup)
+
+target_link_libraries(${PROJECTNAME} PRIVATE ${CMAKE_SOURCE_DIR}/Texter/external/glew-2.1.0/lib/Release/x64/glew32s.lib)
 
 
 
 
-
-
-
-
-
-#-----------------------------------------
-#glfw
-message("Getting glfw")
-
-
-# Set the download URL for GLFW
-set(GLFW_DOWNLOAD_URL "https://github.com/glfw/glfw/releases/download/3.3.5/glfw-3.3.5.bin.WIN64.zip")
-
-# Set the destination directory for the downloaded and unzipped GLFW files
-set(GLFW_DOWNLOAD_DIR "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/glfw_download")
-
-set(GLFW_DIR "${GLFW_DOWNLOAD_DIR}/glfw-3.3.5.bin.WIN64")
-
-
-
-# Download and extract the GLFW zip file
-file(DOWNLOAD ${GLFW_DOWNLOAD_URL} "${GLFW_DOWNLOAD_DIR}/glfw.zip")
-execute_process(COMMAND ${CMAKE_COMMAND} -E tar xzf "${GLFW_DOWNLOAD_DIR}/glfw.zip"
-    WORKING_DIRECTORY ${GLFW_DOWNLOAD_DIR})
-
-# Add the GLFW include directory to the project
-include_directories(${GLFW_DIR}/include)
-
-
-
-
-
-
-
-
-
-
-#-----------------------------------------
-#glew
-message("Getting glew -------------------------------------------")
-
-# Set the download URL for GLEW
-set(GLEW_DOWNLOAD_URL "https://sourceforge.net/projects/glew/files/glew/2.1.0/glew-2.1.0-win32.zip/download")
-
-# Set the destination directory for the downloaded and unzipped GLEW files
-set(GLEW_DOWNLOAD_DIR "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/glew_download")
-set(GLEW_DIR "${GLEW_DOWNLOAD_DIR}/glew-2.1.0")
-
-
-# Download and extract the GLEW zip file
-file(DOWNLOAD ${GLEW_DOWNLOAD_URL} "${GLEW_DOWNLOAD_DIR}/glew.zip")
-execute_process(COMMAND ${CMAKE_COMMAND} -E tar xzf "${GLEW_DOWNLOAD_DIR}/glew.zip"
-    WORKING_DIRECTORY ${GLEW_DOWNLOAD_DIR})
-
-# Add the GLEW include directory to the project
-include_directories(${GLEW_DIR}/include)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# Add the GLFW library to the project
-add_library(glfw3 STATIC IMPORTED)
-set_target_properties(glfw3 PROPERTIES IMPORTED_LOCATION "${GLFW_DIR}/lib-vc2019/glfw3.lib")
-
-# Add the GLEW library to the project
-add_library(glew STATIC IMPORTED)
-set_target_properties(glew PROPERTIES IMPORTED_LOCATION "${GLEW_DIR}/lib/Release/x64/glew32s.lib")
-
-
-# Define the executable target
-add_executable(${PROJECTNAME} ${SRC_FILES} ${HEADER_FILES})
-
-# Set the output path for the executable
-set_target_properties(${PROJECTNAME} PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
-
-# Link the target against the library
-target_link_libraries(${PROJECTNAME} glew glfw3)
-
-
-
-
-
-# copy dll for glut library because we are statically linking it
-#set(GLUT_DLL  "lib/glut64.dll")
-#file(COPY ${GLUT_DLL} DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Debug)
-
-
-
-
-
+# Install the executable
+install(TARGETS ${PROJECTNAME} DESTINATION bin)
