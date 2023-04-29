@@ -1,10 +1,15 @@
 cmake_minimum_required(VERSION 3.0)
 
 set(PROJECTNAME Texter)
+
+set(GLFW_PATH "${CMAKE_CURRENT_SOURCE_DIR}/Texter/external/glfw")
+
+
+
 project(${PROJECTNAME})
 
 
-if (NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/glfw")
+if (NOT EXISTS "${GLFW_PATH}")
     message("-----------------------------------------------------------------------------------------------------------------")
     message("GLFW is included in this project as a submodule, so if you did not clone with '--recurse-submodules' you will need to do that")
     message("clone --recurse-submodules https://url.of.repo")
@@ -60,7 +65,7 @@ file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
 # GLFW - SETUP
 #---------------------------
 # Add GLFW as a subdirectory
-add_subdirectory(glfw)
+add_subdirectory(${GLFW_PATH})
 
 #---------------------------
 # GLEW - SETUP
@@ -90,7 +95,7 @@ add_executable(${PROJECTNAME} ${SRC_FILES})
 # GLFW - TARGET
 #---------------------------
 # Set the include directories for GLFW
-target_include_directories(${PROJECTNAME} PUBLIC glfw/include)
+target_include_directories(${PROJECTNAME} PUBLIC ${GLFW_PATH}/include)
 
 # Link GLFW to your project
 target_link_libraries(${PROJECTNAME} PUBLIC glfw)

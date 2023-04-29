@@ -1,3 +1,6 @@
 [submodule "glfw"]
 	path = Texter/external/glfw
 	url = https://github.com/glfw/glfw.git
+[submodule "Texter/external/glfw"]
+	path = Texter/external/glfw
+	url = https://github.com/glfw/glfw.git
