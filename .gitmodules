@@ -4,3 +4,6 @@
 [submodule "Texter/external/glfw"]
 	path = Texter/external/glfw
 	url = https://github.com/glfw/glfw.git
+[submodule "Texter/external/stb"]
+	path = Texter/external/stb
+	url = https://github.com/nothings/stb.git
