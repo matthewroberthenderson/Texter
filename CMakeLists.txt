@@ -46,29 +46,44 @@ file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
 #required to link with glew static library
 add_definitions(-DGLEW_STATIC)
 
+
+
+
+# Add GLFW as a subdirectory
+add_subdirectory(glfw)
+
+
+
+
+
+
+
 set(CMAKE_PREFIX_PATH "${EXTERNALS}/glew-2.1.0" )
 find_package(GLEW REQUIRED)
-set(GLFW_DIR "${EXTERNALS}/glfw-3.3.8.bin.WIN64")
-
-# Include directories for GLFW
-include_directories("${GLFW_DIR}/include")
 
 #stb image
 include_directories(${EXTERNALS}/stb/)
 
-# Link directories for GLFW
-link_directories("${GLFW_DIR}/lib-vc2022")
+
 link_directories("${EXTERNALS}/glew-2.1.0/lib/Release/x64/")
 
 #exe
 add_executable(${PROJECTNAME} ${SRC_FILES})
 
 
-target_link_libraries(${PROJECTNAME} PRIVATE ${GLFW_DIR}/lib-vc2022/glfw3.lib)
+# Set the include directories for GLFW
+target_include_directories(${PROJECTNAME} PUBLIC glfw/include)
+
+# Link GLFW to your project
+target_link_libraries(${PROJECTNAME} PUBLIC glfw)
+
+
 target_include_directories(${PROJECTNAME} PRIVATE ${GLEW_INCLUDE_DIRS})
 #add OpenGL32.lib to included libs
 target_link_libraries(${PROJECTNAME} PRIVATE OpenGL32.lib)
 target_link_libraries(${PROJECTNAME} PRIVATE ${EXTERNALS}/glew-2.1.0/lib/Release/x64/glew32s.lib)
+
+
 
 # Install 
 install(TARGETS ${PROJECTNAME} DESTINATION bin)
